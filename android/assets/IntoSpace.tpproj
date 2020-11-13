@@ -35,6 +35,45 @@ scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
 inputFiles=[{path:../../../IntoSpaceAssets/Blocks/Cobblestone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Grass_Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Stone.png,type:Input,regionName:null}]
 
 
+---
+
+name=Player
+filename=
+output=.
+
+alias=true
+alphaThreshold=0
+debug=false
+duplicatePadding=false
+edgePadding=true
+fast=false
+filterMag=Nearest
+filterMin=Nearest
+ignoreBlankImages=true
+maxHeight=2048
+maxWidth=2048
+minHeight=16
+minWidth=16
+paddingX=2
+paddingY=2
+pot=true
+mof=false
+rotation=false
+stripWhitespaceX=false
+stripWhitespaceY=false
+wrapX=ClampToEdge
+wrapY=ClampToEdge
+premultiplyAlpha=false
+grid=true
+square=false
+bleed=true
+limitMemory=true
+useIndexes=true
+
+scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
+inputFiles=[{path:../../../IntoSpaceAssets/Player/Player_Running_6.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_0.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_1.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_2.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_3.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_4.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_5.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Idle.png,type:Input,regionName:null}]
+
+
 -PROJ-
 
 version=4.9.0
