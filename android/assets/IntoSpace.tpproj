@@ -71,7 +71,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../../IntoSpaceAssets/Player/Player_Running_6.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_0.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_1.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_2.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_3.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_4.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_5.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Idle.png,type:Input,regionName:null}]
+inputFiles=[{path:../../../IntoSpaceAssets/Player/Player_Running_6.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_0.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_1.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_2.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_3.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_4.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_5.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Idle.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Hand.png,type:Input,regionName:null}]
 
 
 -PROJ-

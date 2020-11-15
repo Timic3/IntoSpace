@@ -1,9 +1,6 @@
 package com.intospace.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -24,6 +21,7 @@ public class IntoSpaceGame extends ApplicationAdapter {
 
 	Player player;
 
+	boolean cameraLocked;
 	OrthographicCamera gameCamera;
 	OrthographicCamera hudCamera;
 
@@ -53,14 +51,16 @@ public class IntoSpaceGame extends ApplicationAdapter {
 
 		textureAtlas = new TextureAtlas("Player.atlas");
 		Animation<TextureRegion> runningAnimation = new Animation<TextureRegion>(0.070f, textureAtlas.findRegions("Player_Running"), Animation.PlayMode.LOOP);
-		player = new Player(0, 0, textureAtlas.findRegion("Player_Idle"), runningAnimation);
+		player = new Player(0, 0, textureAtlas.findRegion("Player_Idle"), textureAtlas.findRegion("Player_Hand"), runningAnimation, gameCamera);
 
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(player);
 		inputMultiplexer.addProcessor(new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
-				return false;
+				if (keycode == Input.Keys.SPACE)
+					cameraLocked = !cameraLocked;
+				return true;
 			}
 
 			@Override
@@ -107,6 +107,8 @@ public class IntoSpaceGame extends ApplicationAdapter {
 		if (Gdx.input.isTouched()) {
 			gameCamera.translate(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY());
 		}
+		if (cameraLocked)
+			gameCamera.position.set(player.getOriginX(), player.getOriginY(), 0);
 		gameCamera.update();
 		batch.setProjectionMatrix(gameCamera.combined);
 		hudCamera.update();
@@ -116,8 +118,8 @@ public class IntoSpaceGame extends ApplicationAdapter {
 	@Override
 	public void render() {
 		float delta = Gdx.graphics.getDeltaTime();
-		update();
 		player.update(delta);
+		update();
 		Gdx.gl.glClearColor(0, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -135,7 +137,9 @@ public class IntoSpaceGame extends ApplicationAdapter {
 		batch.end();
 
 		hud.begin();
+		font.getData().markupEnabled = true;
 		font.draw(hud, "FPS: " + Gdx.graphics.getFramesPerSecond(), 5, hudCamera.viewportHeight - 5);
+		font.draw(hud, "Camera: " + (cameraLocked ? "[#FF0000]Locked" : "[#00FF00]Unlocked"), 5, hudCamera.viewportHeight - 5 - font.getLineHeight());
 		font.draw(hud, VERSION, hudCamera.viewportWidth - versionWidth - 5, font.getLineHeight());
 		hud.end();
 		// Gdx.graphics.setTitle("Into Space (FPS: " + Gdx.graphics.getFramesPerSecond() + ")");
