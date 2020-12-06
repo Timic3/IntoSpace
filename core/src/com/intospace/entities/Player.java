@@ -9,21 +9,34 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.*;
+import com.intospace.game.Constants;
 import com.intospace.game.Entity;
+import com.intospace.game.IntoSpaceGame;
 
 enum PointerSide {
     EAST, WEST
 }
 
+enum State {
+    GROUND, JUMPING, FALLING
+}
+
 public class Player extends Entity implements InputProcessor {
+    static final float MAX_SPEED = 4f;
+
     private float x;
-    private float y = 320;
+    private float y;
+    private float width;
+    private float height;
+
     private float handRotation;
-    private TextureAtlas.AtlasRegion idleTexture;
-    private TextureAtlas.AtlasRegion handTexture;
-    private Animation<TextureRegion> runningAnimation;
-    private OrthographicCamera camera;
+    private final TextureAtlas.AtlasRegion idleTexture;
+    private final TextureAtlas.AtlasRegion handTexture;
+    private final Animation<TextureRegion> runningAnimation;
+    private final OrthographicCamera camera;
 
     private boolean moveLeft;
     private boolean moveRight;
@@ -32,37 +45,83 @@ public class Player extends Entity implements InputProcessor {
 
     private float runningTime;
 
-    public Player(float x, float y) {
-        super(x, y);
-    }
+    public Body body;
 
-    public Player(float x, float y, TextureAtlas.AtlasRegion idleTexture, TextureAtlas.AtlasRegion handTexture, Animation<TextureRegion> runningAnimation, OrthographicCamera camera) {
-        this(x, y);
-        this.idleTexture = idleTexture;
-        this.handTexture = handTexture;
-        this.runningAnimation = runningAnimation;
+    public Player(float x, float y, TextureAtlas textureAtlas, OrthographicCamera camera, World world) {
+        super(x, y);
+        x = 0;
+        y = 320;
+        this.idleTexture = textureAtlas.findRegion("Player_Idle");
+        this.handTexture = textureAtlas.findRegion("Player_Hand");
+        this.runningAnimation = new Animation<TextureRegion>(0.070f, textureAtlas.findRegions("Player_Running"), Animation.PlayMode.LOOP);
         this.camera = camera;
+        this.width = this.idleTexture.getRegionWidth();
+        this.height = this.idleTexture.getRegionHeight();
+
+        // Collisions
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set((x + width / 2f) / Constants.PPM, (y + height) / Constants.PPM);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+
+        PolygonShape smallPlayerShape = new PolygonShape();
+        smallPlayerShape.setAsBox(width / 2f / Constants.PPM, height / 2f / Constants.PPM - 0.01f, new Vector2(0, -height / Constants.PPM / 2f + 0.1f), 0);
+        FixtureDef fixtureDefSmall = new FixtureDef();
+        fixtureDefSmall.shape = smallPlayerShape;
+        fixtureDefSmall.friction = 0;
+        fixtureDefSmall.density = 0;
+        fixtureDefSmall.restitution = 0f;
+
+        PolygonShape playerShape = new PolygonShape();
+        playerShape.setAsBox(width / 2f / Constants.PPM - 0.05f, height / 2f / Constants.PPM, new Vector2(0, -height / Constants.PPM / 2f + 0.1f), 0);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = playerShape;
+        fixtureDef.friction = 2f;
+        fixtureDef.density = 1f;
+        fixtureDef.restitution = 0f;
+
+        body.createFixture(fixtureDef);
+        body.createFixture(fixtureDefSmall);
+        playerShape.dispose();
+        smallPlayerShape.dispose();
+
+        body.setUserData(this);
     }
 
     public void update(float delta) {
         if (moveLeft) {
-            x -= 250 * delta;
+            // x -= 250 * delta;
+            // body.applyLinearImpulse(-0.80f, 0, body.getPosition().x, body.getPosition().y, true);
+            // body.setLinearVelocity(-4f, velocity.y);
+            // body.applyForceToCenter(-100, 0, true);
+            body.applyLinearImpulse(-10f, 0, body.getPosition().x, body.getPosition().y, true);
+            if (body.getLinearVelocity().x < -MAX_SPEED) {
+                body.setLinearVelocity(-MAX_SPEED, body.getLinearVelocity().y);
+            }
         }
         if (moveRight) {
-            x += 250 * delta;
+            // x += 250 * delta;
+            // body.applyLinearImpulse(0.80f, 0, body.getPosition().x, body.getPosition().y, true);
+            // body.setLinearVelocity(4f, velocity.y);
+            // body.applyForceToCenter(100, 0, true);
+            body.applyLinearImpulse(10, 0, body.getPosition().x, body.getPosition().y, true);
+            if (body.getLinearVelocity().x > MAX_SPEED) {
+                body.setLinearVelocity(MAX_SPEED, body.getLinearVelocity().y);
+            }
         }
     }
 
     public void render(SpriteBatch batch) {
-        int width = idleTexture.getRegionWidth();
         if (moveLeft || moveRight) {
             runningTime += Gdx.graphics.getDeltaTime();
             TextureRegion currentFrame = runningAnimation.getKeyFrame(runningTime, true);
-            batch.draw(currentFrame, x + (pointerSide == PointerSide.EAST ? width : 0), y, (pointerSide == PointerSide.EAST ? -width : width), currentFrame.getRegionHeight());
+            batch.draw(currentFrame, body.getPosition().x + (pointerSide == PointerSide.EAST ? width : -width) / 2f / Constants.PPM, body.getPosition().y - height / Constants.PPM + 0.1f, (pointerSide == PointerSide.EAST ? -width : width) / Constants.PPM, height / Constants.PPM);
         } else {
-            batch.draw(idleTexture, x + (pointerSide == PointerSide.EAST ? width : 0), y, (pointerSide == PointerSide.EAST ? -width : width), idleTexture.getRegionHeight());
+            batch.draw(idleTexture, body.getPosition().x + (pointerSide == PointerSide.EAST ? width : -width) / 2f / Constants.PPM, body.getPosition().y - height / Constants.PPM + 0.1f, (pointerSide == PointerSide.EAST ? -width : width) / Constants.PPM, height / Constants.PPM);
         }
-        batch.draw(handTexture, x + (pointerSide == PointerSide.EAST ? width : 0), y, (pointerSide == PointerSide.EAST ? -10 : 10), handTexture.getRegionHeight() / 1.6f, (pointerSide == PointerSide.EAST ? -width : width), handTexture.getRegionHeight(), 1, 1, (pointerSide == PointerSide.EAST ? handRotation - 80 : handRotation + 180 + 80));
+        batch.draw(handTexture, body.getPosition().x + (pointerSide == PointerSide.EAST ? width : -width) / Constants.PPM / 2f, body.getPosition().y - height / Constants.PPM + 0.1f, (pointerSide == PointerSide.EAST ? -10 : 10) / Constants.PPM, height / 1.6f / Constants.PPM, (pointerSide == PointerSide.EAST ? -width : width) / Constants.PPM, height / Constants.PPM, 1, 1, (pointerSide == PointerSide.EAST ? handRotation - 80 : handRotation + 180 + 80));
+        //batch.draw(idleTexture, body.getPosition().x - width / Constants.PPM / 2f, body.getPosition().y - height / Constants.PPM / 2f, width / Constants.PPM, height / Constants.PPM);
     }
 
     private void moveLeft(boolean state) {
@@ -76,11 +135,20 @@ public class Player extends Entity implements InputProcessor {
     }
 
     public float getOriginX() {
-        return x + idleTexture.getRegionWidth() / 2f;
+        return body.getPosition().x;
     }
 
     public float getOriginY() {
-        return y + idleTexture.getRegionHeight() / 2f;
+        return body.getPosition().y;
+    }
+
+    public State getState() {
+        if (body.getLinearVelocity().y > 0) {
+            return State.JUMPING;
+        } else if (body.getLinearVelocity().y < 0) {
+            return State.FALLING;
+        }
+        return State.GROUND;
     }
 
     @Override
@@ -91,6 +159,11 @@ public class Player extends Entity implements InputProcessor {
                 break;
             case Keys.D:
                 moveRight(true);
+                break;
+            case Keys.W:
+                if (getState() == State.GROUND) {
+                    body.applyForceToCenter(0, 90f, true);
+                }
                 break;
         }
         return false;
@@ -132,11 +205,11 @@ public class Player extends Entity implements InputProcessor {
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         Vector3 worldPosition = camera.unproject(new Vector3(screenX, screenY, 0));
-        if (worldPosition.x > this.x + this.idleTexture.getRegionWidth() / 2f)
+        if (worldPosition.x > (body.getPosition().x))
             pointerSide = PointerSide.WEST;
         else
             pointerSide = PointerSide.EAST;
-        handRotation = MathUtils.radiansToDegrees * MathUtils.atan2((this.y + this.idleTexture.getRegionHeight() / 2f) - worldPosition.y, (this.x + this.idleTexture.getRegionWidth() / 2f) - worldPosition.x);
+        handRotation = MathUtils.radiansToDegrees * MathUtils.atan2((body.getPosition().y + height / Constants.PPM / 2f) - worldPosition.y, (body.getPosition().x) - worldPosition.x);
         if (handRotation < 0)
             handRotation += 360;
         return true;
