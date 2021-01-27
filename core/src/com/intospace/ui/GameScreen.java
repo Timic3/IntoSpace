@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.intospace.game.IntoSpaceGame;
 
 public class GameScreen {
     public int selected = 0;
@@ -32,7 +31,7 @@ public class GameScreen {
         font = new BitmapFont();
         font.getData().markupEnabled = true;
         GlyphLayout glyphLayout = new GlyphLayout();
-        glyphLayout.setText(font, IntoSpaceGame.VERSION);
+        glyphLayout.setText(font, com.intospace.screens.GameScreen.VERSION);
         versionWidth = glyphLayout.width;
     }
 
@@ -64,17 +63,17 @@ public class GameScreen {
 
         ui.begin();
         font.draw(ui, "FPS: " + Gdx.graphics.getFramesPerSecond(), 5, uiCamera.viewportHeight - 5);
-        font.draw(ui, "Camera: " + (IntoSpaceGame.cameraLocked ? "[#FF0000]Locked" : "[#00FF00]Unlocked"), 5, uiCamera.viewportHeight - 5 - font.getLineHeight());
-        font.draw(ui, IntoSpaceGame.VERSION, uiCamera.viewportWidth - versionWidth - 5, font.getLineHeight());
+        font.draw(ui, "Camera: " + (com.intospace.screens.GameScreen.cameraLocked ? "[#FF0000]Locked" : "[#00FF00]Unlocked"), 5, uiCamera.viewportHeight - 5 - font.getLineHeight());
+        font.draw(ui, com.intospace.screens.GameScreen.VERSION, uiCamera.viewportWidth - versionWidth - 5, font.getLineHeight());
 
         ui.setColor(1, 1, 1, selected != 0 ? 0.5f : 1);
-        ui.draw(IntoSpaceGame.grassDirt, 32, 32, 32, 32);
+        ui.draw(com.intospace.screens.GameScreen.grassDirt, 32, 32, 32, 32);
         ui.setColor(1, 1, 1, selected != 1 ? 0.5f : 1);
-        ui.draw(IntoSpaceGame.dirt, 32 * 2 + 4, 32, 32, 32);
+        ui.draw(com.intospace.screens.GameScreen.dirt, 32 * 2 + 4, 32, 32, 32);
         ui.setColor(1, 1, 1, selected != 2 ? 0.5f : 1);
-        ui.draw(IntoSpaceGame.stone, 32 * 3 + 4 * 2, 32, 32, 32);
+        ui.draw(com.intospace.screens.GameScreen.stone, 32 * 3 + 4 * 2, 32, 32, 32);
         ui.setColor(1, 1, 1, selected != 3 ? 0.5f : 1);
-        ui.draw(IntoSpaceGame.cobblestone, 32 * 4 + 4 * 3, 32, 32, 32);
+        ui.draw(com.intospace.screens.GameScreen.cobblestone, 32 * 4 + 4 * 3, 32, 32, 32);
 
         ui.end();
     }

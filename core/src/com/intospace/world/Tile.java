@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.intospace.entities.Entity;
 import com.intospace.game.Constants;
-import com.intospace.game.Entity;
 
 public class Tile extends Entity {
     private final TextureAtlas.AtlasRegion texture;

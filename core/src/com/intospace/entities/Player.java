@@ -13,8 +13,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.intospace.game.Constants;
-import com.intospace.game.Entity;
 import com.intospace.game.IntoSpaceGame;
+import com.intospace.screens.GameScreen;
+import com.intospace.world.Assets;
 
 enum PointerSide {
     EAST, WEST
@@ -32,9 +33,9 @@ public class Player extends Entity implements InputProcessor {
     private float width;
     private float height;
 
-    private float handRotation;
-    private final TextureAtlas.AtlasRegion idleTexture;
-    private final TextureAtlas.AtlasRegion handTexture;
+    private float handRotation = 90;
+    protected TextureAtlas.AtlasRegion idleTexture;
+    protected TextureAtlas.AtlasRegion handTexture;
     private final Animation<TextureRegion> runningAnimation;
     private final OrthographicCamera camera;
 
@@ -45,15 +46,13 @@ public class Player extends Entity implements InputProcessor {
 
     private float runningTime;
 
-    public Body body;
-
-    public Player(float x, float y, TextureAtlas textureAtlas, OrthographicCamera camera, World world) {
+    public Player(float x, float y, OrthographicCamera camera, World world) {
         super(x, y);
-        x = 0;
-        y = 320;
-        this.idleTexture = textureAtlas.findRegion("Player_Idle");
-        this.handTexture = textureAtlas.findRegion("Player_Hand");
-        this.runningAnimation = new Animation<TextureRegion>(0.070f, textureAtlas.findRegions("Player_Running"), Animation.PlayMode.LOOP);
+        final TextureAtlas atlas = IntoSpaceGame.getInstance().assets.get(Assets.PLAYER);
+
+        this.idleTexture = atlas.findRegion("Player_Idle");
+        this.handTexture = atlas.findRegion("Player_Hand");
+        this.runningAnimation = new Animation<TextureRegion>(0.070f, atlas.findRegions("Player_Running"), Animation.PlayMode.LOOP);
         this.camera = camera;
         this.width = this.idleTexture.getRegionWidth();
         this.height = this.idleTexture.getRegionHeight();
@@ -72,6 +71,9 @@ public class Player extends Entity implements InputProcessor {
         fixtureDefSmall.friction = 0;
         fixtureDefSmall.density = 0;
         fixtureDefSmall.restitution = 0f;
+        if (x == 0 && y == 420) {
+            fixtureDefSmall.isSensor = true;
+        }
 
         PolygonShape playerShape = new PolygonShape();
         playerShape.setAsBox(width / 2f / Constants.PPM - 0.05f, height / 2f / Constants.PPM, new Vector2(0, -height / Constants.PPM / 2f + 0.1f), 0);
@@ -80,6 +82,9 @@ public class Player extends Entity implements InputProcessor {
         fixtureDef.friction = 2f;
         fixtureDef.density = 1f;
         fixtureDef.restitution = 0f;
+        if (x == 0 && y == 420) {
+            fixtureDef.isSensor = true;
+        }
 
         body.createFixture(fixtureDef);
         body.createFixture(fixtureDefSmall);
@@ -113,6 +118,13 @@ public class Player extends Entity implements InputProcessor {
     }
 
     public void render(SpriteBatch batch) {
+        if (this instanceof AIPlayer) {
+            if (body.getLinearVelocity().x <= 0) {
+                pointerSide = PointerSide.EAST;
+            } else {
+                pointerSide = PointerSide.WEST;
+            }
+        }
         if (moveLeft || moveRight) {
             runningTime += Gdx.graphics.getDeltaTime();
             TextureRegion currentFrame = runningAnimation.getKeyFrame(runningTime, true);
@@ -120,7 +132,9 @@ public class Player extends Entity implements InputProcessor {
         } else {
             batch.draw(idleTexture, body.getPosition().x + (pointerSide == PointerSide.EAST ? width : -width) / 2f / Constants.PPM, body.getPosition().y - height / Constants.PPM + 0.1f, (pointerSide == PointerSide.EAST ? -width : width) / Constants.PPM, height / Constants.PPM);
         }
-        batch.draw(handTexture, body.getPosition().x + (pointerSide == PointerSide.EAST ? width : -width) / Constants.PPM / 2f, body.getPosition().y - height / Constants.PPM + 0.1f, (pointerSide == PointerSide.EAST ? -10 : 10) / Constants.PPM, height / 1.6f / Constants.PPM, (pointerSide == PointerSide.EAST ? -width : width) / Constants.PPM, height / Constants.PPM, 1, 1, (pointerSide == PointerSide.EAST ? handRotation - 80 : handRotation + 180 + 80));
+        if (handTexture != null) {
+            batch.draw(handTexture, body.getPosition().x + (pointerSide == PointerSide.EAST ? width : -width) / Constants.PPM / 2f, body.getPosition().y - height / Constants.PPM + 0.1f, (pointerSide == PointerSide.EAST ? -10 : 10) / Constants.PPM, height / 1.6f / Constants.PPM, (pointerSide == PointerSide.EAST ? -width : width) / Constants.PPM, height / Constants.PPM, 1, 1, (pointerSide == PointerSide.EAST ? handRotation - 80 : handRotation + 180 + 80));
+        }
         //batch.draw(idleTexture, body.getPosition().x - width / Constants.PPM / 2f, body.getPosition().y - height / Constants.PPM / 2f, width / Constants.PPM, height / Constants.PPM);
     }
 
