@@ -3,6 +3,7 @@ package com.intospace.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.intospace.screens.SplashScreen;
 import com.intospace.world.Assets;
 

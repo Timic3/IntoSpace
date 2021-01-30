@@ -13,12 +13,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.intospace.sounds.SoundManager;
 
 public class OptionsScreen extends ScreenBase {
     private Stage stage;
+    private ScreenBase previousScreen;
 
     public OptionsScreen(Game game) {
         super(game);
+    }
+
+    public OptionsScreen(Game game, ScreenBase previousScreen) {
+        super(game);
+        this.previousScreen = previousScreen;
     }
 
     @Override
@@ -155,17 +162,23 @@ public class OptionsScreen extends ScreenBase {
             public void changed(ChangeEvent event, Actor actor) {
                 if (musicSlider.isDragging()) {
                     musicField.setText(String.valueOf((int) musicSlider.getValue()));
+                    SoundManager.getInstance().setMusic((int) musicSlider.getValue());
                 }
             }
         });
 
         back.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainScreen(game));
+                if (previousScreen != null) {
+                    game.setScreen(previousScreen);
+                } else {
+                    game.setScreen(new MainScreen(game));
+                }
                 settings.putInteger("fps", Integer.parseInt(fpsField.getText()));
                 settings.putBoolean("vsync", vSync.isChecked());
                 settings.putInteger("sfx", Integer.parseInt(sfxField.getText()));
                 settings.putInteger("music", Integer.parseInt(musicField.getText()));
+                SoundManager.getInstance().setMusic(Integer.parseInt(musicField.getText()));
                 settings.flush();
             }
         });
