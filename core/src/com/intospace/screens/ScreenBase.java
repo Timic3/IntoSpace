@@ -1,6 +1,7 @@
 package com.intospace.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.intospace.game.IntoSpaceGame;
@@ -42,11 +43,11 @@ public class ScreenBase implements Screen {
 
     @Override
     public void hide() {
-
+        this.dispose();
     }
 
     @Override
     public void dispose() {
-
+        Gdx.app.debug("Screen", "Disposing of " + getClass().getSimpleName());
     }
 }

@@ -1,17 +1,18 @@
 package com.intospace.world.generators;
 
 public class PerlinNoise {
-    private static final double FREQUENCY = 2;
     long seed;
+    double frequency;
 
-    public PerlinNoise(long seed) {
+    public PerlinNoise(long seed, double frequency) {
         this.seed = seed;
+        this.frequency = frequency;
     }
 
     public int getNoise(int x, int range) {
         int chunkSize = 64;
         float noise = 0;
-        range /= FREQUENCY;
+        range /= frequency;
 
         while (chunkSize > 0) {
             int chunkIndex = x / chunkSize;
@@ -21,8 +22,8 @@ public class PerlinNoise {
 
             noise += (1 - progress) * leftRandom + progress * rightRandom;
 
-            chunkSize /= FREQUENCY;
-            range /= FREQUENCY;
+            chunkSize /= frequency;
+            range /= frequency;
             range = Math.max(range, 1);
         }
 

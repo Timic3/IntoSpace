@@ -195,7 +195,6 @@ public class OptionsScreen extends ScreenBase {
 
     @Override
     public void dispose() {
-        Gdx.app.debug("IntoSpace", "Disposing of options screen");
         stage.dispose();
     }
 }

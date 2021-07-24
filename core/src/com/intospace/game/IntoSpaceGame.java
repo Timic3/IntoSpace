@@ -13,16 +13,18 @@ public class IntoSpaceGame extends Game {
     @Override
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        Gdx.app.log("Game", "Welcome to Into Space!");
 
         assets = new Assets();
+        assets.preload();
         assets.load();
-        assets.finishLoading();
 
         this.setScreen(new SplashScreen(this));
     }
 
     @Override
     public void dispose() {
+        Gdx.app.log("Game", "Disposed of loaded assets");
         assets.dispose();
     }
 

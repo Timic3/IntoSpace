@@ -14,6 +14,8 @@ public class Tile extends Entity {
     private final float width;
     private final float height;
 
+    private boolean atEdge = false;
+
     public Body body;
     public World world;
 
@@ -58,8 +60,26 @@ public class Tile extends Entity {
 
     }
 
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, x / Constants.PPM, y / Constants.PPM, this.width, this.height);
+    public void render(SpriteBatch batch, int renderX) {
+        if (renderX >= Constants.MAX_X) {
+            if (!atEdge) {
+                atEdge = true;
+                body.setTransform((x + 32 / 2f) / Constants.PPM + Constants.MAX_X * this.width, (y + 32 / 2f) / Constants.PPM, 0);
+            }
+            batch.draw(texture, x / Constants.PPM + Constants.MAX_X * this.width, y / Constants.PPM, this.width, this.height);
+        } else if (renderX < 0) {
+            if (!atEdge) {
+                atEdge = true;
+                body.setTransform((x + 32 / 2f) / Constants.PPM - Constants.MAX_X * this.width, (y + 32 / 2f) / Constants.PPM, 0);
+            }
+            batch.draw(texture, x / Constants.PPM - Constants.MAX_X * this.width, y / Constants.PPM, this.width, this.height);
+        } else {
+            if (atEdge) {
+                atEdge = false;
+                body.setTransform((x + 32 / 2f) / Constants.PPM, (y + 32 / 2f) / Constants.PPM, 0);
+            }
+            batch.draw(texture, x / Constants.PPM, y / Constants.PPM, this.width, this.height);
+        }
     }
 
     public void remove() {

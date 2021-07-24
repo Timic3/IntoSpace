@@ -32,7 +32,7 @@ public class CreditsScreen extends ScreenBase {
 
         final Label me = new Label("Timotej M.", this.skin);
         me.setFontScale(0.8f);
-        final Label music = new Label("Royalty Free Music", this.skin);
+        final Label music = new Label("Music from https://www.zapsplat.com", this.skin);
         music.setFontScale(0.8f);
         final Label engine = new Label("LibGDX and third-party libraries", this.skin);
         engine.setFontScale(0.8f);
@@ -69,7 +69,6 @@ public class CreditsScreen extends ScreenBase {
 
     @Override
     public void dispose() {
-        Gdx.app.debug("IntoSpace", "Disposing of credits screen");
         stage.dispose();
     }
 }

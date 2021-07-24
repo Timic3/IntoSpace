@@ -32,7 +32,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../../IntoSpaceAssets/Blocks/Cobblestone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Grass_Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Stone.png,type:Input,regionName:null}]
+inputFiles=[{path:../../../IntoSpaceAssets/Blocks/Cobblestone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Grass_Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Moon_Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Sand_Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Sand.png,type:Input,regionName:null}]
 
 
 ---
@@ -115,7 +115,7 @@ inputFiles=[{path:../../../IntoSpaceAssets/Ghost.png,type:Input,regionName:null}
 
 -PROJ-
 
-version=4.9.0
+version=4.10.0
 fileTypeType=png
 fileTypeData={encoding:RGBA8888}
 previewBackgroundColor=ffffffff

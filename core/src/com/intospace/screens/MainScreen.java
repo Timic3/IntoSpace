@@ -2,6 +2,7 @@ package com.intospace.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -53,7 +54,7 @@ public class MainScreen extends ScreenBase {
         play.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new IntroScreen(game));
             }
         });
 
@@ -89,7 +90,6 @@ public class MainScreen extends ScreenBase {
 
     @Override
     public void dispose() {
-        Gdx.app.debug("IntoSpace", "Disposing of main screen");
         stage.dispose();
     }
 }

@@ -16,6 +16,7 @@ import com.intospace.game.Constants;
 import com.intospace.game.IntoSpaceGame;
 import com.intospace.screens.GameScreen;
 import com.intospace.world.Assets;
+import com.intospace.world.WorldManager;
 
 enum PointerSide {
     EAST, WEST
@@ -30,8 +31,8 @@ public class Player extends Entity implements InputProcessor {
 
     private float x;
     private float y;
-    private float width;
-    private float height;
+    private final float width;
+    private final float height;
 
     private float handRotation = 90;
     protected TextureAtlas.AtlasRegion idleTexture;
@@ -52,7 +53,7 @@ public class Player extends Entity implements InputProcessor {
 
         this.idleTexture = atlas.findRegion("Player_Idle");
         this.handTexture = atlas.findRegion("Player_Hand");
-        this.runningAnimation = new Animation<TextureRegion>(0.070f, atlas.findRegions("Player_Running"), Animation.PlayMode.LOOP);
+        this.runningAnimation = new Animation<>(0.070f, atlas.findRegions("Player_Running"), Animation.PlayMode.LOOP);
         this.camera = camera;
         this.width = this.idleTexture.getRegionWidth();
         this.height = this.idleTexture.getRegionHeight();
@@ -115,13 +116,20 @@ public class Player extends Entity implements InputProcessor {
                 body.setLinearVelocity(MAX_SPEED, body.getLinearVelocity().y);
             }
         }
+        if (body.getPosition().x > Constants.MAX_X / 2f) {
+            body.setTransform(body.getPosition().x - Constants.MAX_X / 2f, body.getPosition().y, 0);
+            camera.position.set(camera.position.x - Constants.MAX_X / 2f, camera.position.y, 0);
+        } else if (body.getPosition().x <= 0) {
+            body.setTransform(body.getPosition().x + Constants.MAX_X / 2f, body.getPosition().y, 0);
+            camera.position.set(camera.position.x + Constants.MAX_X / 2f, camera.position.y, 0);
+        }
     }
 
     public void render(SpriteBatch batch) {
         if (this instanceof AIPlayer) {
-            if (body.getLinearVelocity().x <= 0) {
+            if (body.getLinearVelocity().x < 0) {
                 pointerSide = PointerSide.EAST;
-            } else {
+            } else if (body.getLinearVelocity().x > 0) {
                 pointerSide = PointerSide.WEST;
             }
         }
