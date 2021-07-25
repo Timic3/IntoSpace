@@ -1,5 +1,6 @@
 package com.intospace.entities;
 
+import box2dLight.LightData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -72,6 +73,9 @@ public class Player extends Entity implements InputProcessor {
         fixtureDefSmall.friction = 0f;
         fixtureDefSmall.density = 0.1f;
         fixtureDefSmall.restitution = 0f;
+        fixtureDefSmall.filter.categoryBits = (short) 0b01;
+        fixtureDefSmall.filter.groupIndex = (short) 0;
+        fixtureDefSmall.filter.maskBits = (short) 0b10;
 
         PolygonShape playerShape = new PolygonShape();
         playerShape.setAsBox(width / 2f / Constants.PPM - 0.1f, height / 2f / Constants.PPM, new Vector2(0, -height / Constants.PPM / 2f + 0.1f), 0);
@@ -80,6 +84,9 @@ public class Player extends Entity implements InputProcessor {
         fixtureDef.friction = 2f;
         fixtureDef.density = 1f;
         fixtureDef.restitution = 0f;
+        fixtureDef.filter.categoryBits = (short) 0b01;
+        fixtureDef.filter.groupIndex = (short) 0;
+        fixtureDef.filter.maskBits = (short) 0b10;
 
         body.createFixture(fixtureDef);
         body.createFixture(fixtureDefSmall);
@@ -91,9 +98,9 @@ public class Player extends Entity implements InputProcessor {
 
     public void update(float delta) {
         // THIS IS PERFECT!!!
-        float impulse = this.getState() == State.GROUND ? 5f : 5f * delta;
+        float impulse = this.getState() == State.GROUND ? 3f : 3f * delta;
         if (moveLeft) {
-            body.applyLinearImpulse(-impulse, 0, body.getPosition().x, body.getPosition().y - 5.5f, true);
+            body.applyLinearImpulse(-impulse, 0, body.getPosition().x, body.getPosition().y, true);
         }
         if (moveRight) {
             body.applyLinearImpulse(impulse, 0, body.getPosition().x, body.getPosition().y, true);

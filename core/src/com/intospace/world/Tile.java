@@ -1,5 +1,6 @@
 package com.intospace.world;
 
+import box2dLight.LightData;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -50,7 +51,12 @@ public class Tile extends Entity {
         fixtureDef.friction = 3f;
         fixtureDef.density = 1f;
         fixtureDef.restitution = 0f;
-        body.createFixture(fixtureDef);
+
+        fixtureDef.filter.categoryBits = (short) 0b10;
+        fixtureDef.filter.groupIndex = (short) 0;
+        fixtureDef.filter.maskBits = (short) 0b01;
+
+        body.createFixture(fixtureDef).setUserData(new LightData(15));
         cs.dispose();
 
         body.setUserData(this);
