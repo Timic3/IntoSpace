@@ -19,9 +19,6 @@ import com.intospace.world.generators.PerlinNoise;
 
 public class WorldManager implements Disposable {
     public static Tile[][] tiles = new Tile[1000][1000];
-    public static short CATEGORY_LIGHT = 1;
-    public static short GROUP_LIGHT = 1;
-    public static short MASK_LIGHT = 1;
     public DirectionalLight sun;
 
     WorldType type;
@@ -139,7 +136,7 @@ public class WorldManager implements Disposable {
     }
 
     public void update() {
-        float newDirection = sun.getDirection() - 0.5f;
+        float newDirection = sun.getDirection() - 0.01f;
         if (Math.floor(newDirection) <= -90f) {
             newDirection = 270f;
         }

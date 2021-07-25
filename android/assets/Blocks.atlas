@@ -1,54 +1,61 @@
 
 Blocks.png
-size: 256, 64
+size: 256, 32
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 Cobblestone
   rotate: false
-  xy: 171, 1
+  xy: 192, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Dilithium
+  rotate: false
+  xy: 0, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Dirt
   rotate: false
-  xy: 137, 1
+  xy: 160, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Grass_Dirt
   rotate: false
-  xy: 205, 1
+  xy: 224, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Moon_Stone
   rotate: false
-  xy: 35, 1
+  xy: 64, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Sand
   rotate: false
-  xy: 1, 1
+  xy: 32, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Sand_Stone
   rotate: false
-  xy: 69, 1
+  xy: 96, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Stone
   rotate: false
-  xy: 103, 1
+  xy: 128, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

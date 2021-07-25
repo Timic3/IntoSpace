@@ -66,26 +66,20 @@ public class Player extends Entity implements InputProcessor {
         body = world.createBody(bodyDef);
 
         PolygonShape smallPlayerShape = new PolygonShape();
-        smallPlayerShape.setAsBox(width / 2f / Constants.PPM, height / 2f / Constants.PPM - 0.01f, new Vector2(0, -height / Constants.PPM / 2f + 0.1f), 0);
+        smallPlayerShape.setAsBox(width / 2f / Constants.PPM - 0.075f, height / 2f / Constants.PPM - 0.01f, new Vector2(0, -height / Constants.PPM / 2f + 0.1f), 0);
         FixtureDef fixtureDefSmall = new FixtureDef();
         fixtureDefSmall.shape = smallPlayerShape;
-        fixtureDefSmall.friction = 0;
-        fixtureDefSmall.density = 0;
+        fixtureDefSmall.friction = 0f;
+        fixtureDefSmall.density = 0.1f;
         fixtureDefSmall.restitution = 0f;
-        if (x == 0 && y == 420) {
-            fixtureDefSmall.isSensor = true;
-        }
 
         PolygonShape playerShape = new PolygonShape();
-        playerShape.setAsBox(width / 2f / Constants.PPM - 0.05f, height / 2f / Constants.PPM, new Vector2(0, -height / Constants.PPM / 2f + 0.1f), 0);
+        playerShape.setAsBox(width / 2f / Constants.PPM - 0.1f, height / 2f / Constants.PPM, new Vector2(0, -height / Constants.PPM / 2f + 0.1f), 0);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerShape;
         fixtureDef.friction = 2f;
         fixtureDef.density = 1f;
         fixtureDef.restitution = 0f;
-        if (x == 0 && y == 420) {
-            fixtureDef.isSensor = true;
-        }
 
         body.createFixture(fixtureDef);
         body.createFixture(fixtureDefSmall);
@@ -96,26 +90,22 @@ public class Player extends Entity implements InputProcessor {
     }
 
     public void update(float delta) {
+        // THIS IS PERFECT!!!
+        float impulse = this.getState() == State.GROUND ? 5f : 5f * delta;
         if (moveLeft) {
-            // x -= 250 * delta;
-            // body.applyLinearImpulse(-0.80f, 0, body.getPosition().x, body.getPosition().y, true);
-            // body.setLinearVelocity(-4f, velocity.y);
-            // body.applyForceToCenter(-100, 0, true);
-            body.applyLinearImpulse(-10f, 0, body.getPosition().x, body.getPosition().y, true);
-            if (body.getLinearVelocity().x < -MAX_SPEED) {
-                body.setLinearVelocity(-MAX_SPEED, body.getLinearVelocity().y);
-            }
+            body.applyLinearImpulse(-impulse, 0, body.getPosition().x, body.getPosition().y - 5.5f, true);
         }
         if (moveRight) {
-            // x += 250 * delta;
-            // body.applyLinearImpulse(0.80f, 0, body.getPosition().x, body.getPosition().y, true);
-            // body.setLinearVelocity(4f, velocity.y);
-            // body.applyForceToCenter(100, 0, true);
-            body.applyLinearImpulse(10, 0, body.getPosition().x, body.getPosition().y, true);
-            if (body.getLinearVelocity().x > MAX_SPEED) {
-                body.setLinearVelocity(MAX_SPEED, body.getLinearVelocity().y);
-            }
+            body.applyLinearImpulse(impulse, 0, body.getPosition().x, body.getPosition().y, true);
         }
+
+        if (body.getLinearVelocity().x < -MAX_SPEED) {
+            body.setLinearVelocity(-MAX_SPEED, body.getLinearVelocity().y);
+        }
+        if (body.getLinearVelocity().x > MAX_SPEED) {
+            body.setLinearVelocity(MAX_SPEED, body.getLinearVelocity().y);
+        }
+
         if (body.getPosition().x > Constants.MAX_X / 2f) {
             body.setTransform(body.getPosition().x - Constants.MAX_X / 2f, body.getPosition().y, 0);
             camera.position.set(camera.position.x - Constants.MAX_X / 2f, camera.position.y, 0);
