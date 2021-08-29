@@ -8,6 +8,7 @@
 - Sandbox gameplay (you can destroy and place blocks)
 - Day-night time cycle (with ray-traced lightning)
 - Difficulty progression (each planet you travel to, enemies become stronger)
+- Simple quests for player guidance
 - Random terrain generation
 - Terrain wraps around (meaning it's round, if you walk on one side, you'll end up at the start)
 - 3 planets

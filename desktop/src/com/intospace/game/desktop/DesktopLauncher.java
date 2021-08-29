@@ -14,6 +14,7 @@ public class DesktopLauncher {
 		// config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		config.setForegroundFPS(60);
 		config.setIdleFPS(60);
+		config.setWindowIcon("Icon.png");
 		new Lwjgl3Application(new IntoSpaceGame(), config);
 	}
 }

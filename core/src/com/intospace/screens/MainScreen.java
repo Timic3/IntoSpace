@@ -55,7 +55,7 @@ public class MainScreen extends ScreenBase {
         final TextButton options = new TextButton("Options", this.skin);
         final TextButton credits = new TextButton("Credits", this.skin);
         final TextButton quit = new TextButton("Quit", this.skin);
-        table.add(title).padTop(50);
+        table.add(title).width(title.getWidth() * 0.45f).height(title.getHeight() * 0.45f).padTop(50);
         table.row();
         if (!ingame) {
             table.add(screen).padTop(20);
