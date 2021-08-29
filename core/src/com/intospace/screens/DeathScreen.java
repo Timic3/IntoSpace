@@ -5,12 +5,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class IntroScreen extends ScreenBase {
-    public IntroScreen(Game game) {
+public class DeathScreen extends ScreenBase {
+    private int gracePeriod = 0;
+
+    public DeathScreen(Game game) {
         super(game);
     }
 
@@ -25,12 +30,10 @@ public class IntroScreen extends ScreenBase {
         table.align(Align.center);
         stage.addActor(table);
 
-        final Label story = new Label(
-                "You wake up on a familiar planet, deserted and full of mysteries.\n\n" +
-                "Aside from an unknown object that looks like a transport of some kind and mysterious tool in your hand, everything seems natural.\n\n" +
-                "You don't remember anything of your previous life. Explore the universe and create your own story.", this.skin);
+        final Label story = new Label("You died :(", this.skin);
         story.setWrap(true);
         story.setAlignment(Align.center);
+        story.setFontScale(1f);
         table.add(story).width(800);
     }
 
@@ -44,7 +47,8 @@ public class IntroScreen extends ScreenBase {
         stage.act(delta);
         stage.draw();
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || Gdx.input.justTouched()) && !Gdx.input.isKeyPressed(Input.Keys.F11)) {
+        gracePeriod++;
+        if ((Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || Gdx.input.justTouched()) && gracePeriod >= 100) {
             game.setScreen(new GameScreen(game));
         }
     }

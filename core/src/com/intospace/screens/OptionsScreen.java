@@ -16,16 +16,15 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.intospace.sounds.SoundManager;
 
 public class OptionsScreen extends ScreenBase {
-    private Stage stage;
-    private ScreenBase previousScreen;
+    MainScreen mainScreen;
 
     public OptionsScreen(Game game) {
         super(game);
     }
 
-    public OptionsScreen(Game game, ScreenBase previousScreen) {
+    public OptionsScreen(Game game, MainScreen mainScreen) {
         super(game);
-        this.previousScreen = previousScreen;
+        this.mainScreen = mainScreen;
     }
 
     @Override
@@ -90,6 +89,7 @@ public class OptionsScreen extends ScreenBase {
         table.row().padTop(50);
         table.add(back).align(Align.left);
 
+        OptionsScreen that = this;
         fpsField.setTextFieldFilter(new TextField.TextFieldFilter() {
             @Override
             public boolean acceptChar(TextField textField, char c) {
@@ -169,11 +169,8 @@ public class OptionsScreen extends ScreenBase {
 
         back.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                if (previousScreen != null) {
-                    game.setScreen(previousScreen);
-                } else {
-                    game.setScreen(new MainScreen(game));
-                }
+                mainScreen.back();
+                that.dispose();
                 settings.putInteger("fps", Integer.parseInt(fpsField.getText()));
                 settings.putBoolean("vsync", vSync.isChecked());
                 settings.putInteger("sfx", Integer.parseInt(sfxField.getText()));
@@ -186,6 +183,8 @@ public class OptionsScreen extends ScreenBase {
 
     @Override
     public void render(float delta) {
+        super.render(delta);
+
         Gdx.gl.glClearColor(0.23f, 0.23f, 0.23f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

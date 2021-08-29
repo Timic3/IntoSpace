@@ -5,14 +5,23 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public abstract class Entity implements Location<Vector2> {
-    private float x;
-    private float y;
+    public float x;
+    public float y;
+    public int width;
+    public int height;
 
     public Body body;
 
     public Entity(float x, float y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Entity(float x, float y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     public void update(float delta) {

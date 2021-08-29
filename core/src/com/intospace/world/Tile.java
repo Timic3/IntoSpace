@@ -34,30 +34,44 @@ public class Tile extends Entity {
         bodyDef.position.set((x + 32 / 2f) / Constants.PPM, (y + 32 / 2f) / Constants.PPM);
         body = world.createBody(bodyDef);
 
-        /*PolygonShape groundShape = new PolygonShape();
-        groundShape.setAsBox(this.width / 2, this.height / 2);*/
+        EdgeShape groundShape = new EdgeShape();
+        groundShape.set(new Vector2(-this.width / 2, this.height / 2), new Vector2(this.width / 2, this.height / 2));
+
+        PolygonShape boxShape = new PolygonShape();
+        boxShape.setAsBox(this.width / 2, this.height / 2);
 
         // TODO: Improve this
-        ChainShape cs = new ChainShape();
+        /*ChainShape cs = new ChainShape();
         Vector2[] vertices = new Vector2[4];
         vertices[0] = new Vector2(-this.height / 2f, -this.width / 2f);
         vertices[1] = new Vector2(-this.width / 2f, this.width / 2f);
         vertices[2] = new Vector2(this.width / 2f, this.width / 2f);
         vertices[3] = new Vector2(this.width / 2f, -this.width / 2f);
-        cs.createLoop(vertices);
+        cs.createLoop(vertices);*/
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = cs;
+        fixtureDef.shape = groundShape;
         fixtureDef.friction = 3f;
         fixtureDef.density = 1f;
         fixtureDef.restitution = 0f;
+        fixtureDef.isSensor = false;
 
-        fixtureDef.filter.categoryBits = (short) 0b10;
+        fixtureDef.filter.categoryBits = CollisionBits.TERRAIN; // 0b10
         fixtureDef.filter.groupIndex = (short) 0;
-        fixtureDef.filter.maskBits = (short) 0b01;
+        fixtureDef.filter.maskBits = CollisionBits.PLAYER | CollisionBits.ROCKET; // 0b01
 
-        body.createFixture(fixtureDef).setUserData(new LightData(15));
-        cs.dispose();
+        FixtureDef hitFixtureDef = new FixtureDef();
+        hitFixtureDef.shape = boxShape;
+        hitFixtureDef.isSensor = true;
+
+        hitFixtureDef.filter.categoryBits = (short) 0;
+        hitFixtureDef.filter.groupIndex = (short) 0;
+        hitFixtureDef.filter.maskBits = (short) 0;
+
+        body.createFixture(fixtureDef);
+        body.createFixture(hitFixtureDef).setUserData(new LightData(15));
+        groundShape.dispose();
+        boxShape.dispose();
 
         body.setUserData(this);
     }
@@ -106,5 +120,13 @@ public class Tile extends Entity {
 
     public float getHeight() {
         return height;
+    }
+
+    public String getTextureName() {
+        return this.texture.name;
+    }
+
+    public TextureAtlas.AtlasRegion getTexture() {
+        return this.texture;
     }
 }

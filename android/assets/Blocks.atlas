@@ -1,12 +1,12 @@
 
 Blocks.png
-size: 256, 32
+size: 512, 32
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 Cobblestone
   rotate: false
-  xy: 192, 0
+  xy: 224, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -25,9 +25,16 @@ Dirt
   orig: 32, 32
   offset: 0, 0
   index: -1
+Gold
+  rotate: false
+  xy: 192, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 Grass_Dirt
   rotate: false
-  xy: 224, 0
+  xy: 256, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

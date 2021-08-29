@@ -2,30 +2,32 @@ package com.intospace.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class CreditsScreen extends ScreenBase {
+public class ControlsScreen extends ScreenBase {
     MainScreen mainScreen;
 
-    public CreditsScreen(Game game) {
+    public ControlsScreen(Game game) {
         super(game);
     }
-
-    public CreditsScreen(Game game, MainScreen mainScreen) {
+    public ControlsScreen(Game game, MainScreen mainScreen) {
         super(game);
         this.mainScreen = mainScreen;
     }
 
     @Override
     public void show() {
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -35,32 +37,30 @@ public class CreditsScreen extends ScreenBase {
         table.align(Align.top);
         stage.addActor(table);
 
-        final Label me = new Label("Timotej M.", this.skin);
-        me.setFontScale(0.8f);
-        final Label music = new Label("Music from https://www.zapsplat.com", this.skin);
-        music.setFontScale(0.8f);
-        final Label engine = new Label("LibGDX and third-party libraries", this.skin);
-        engine.setFontScale(0.8f);
+        final Label lmb = new Label("Left mouse click - Shoot/break block/open shop by clicking on the rocket", this.skin);
+        lmb.setFontScale(0.8f);
+        final Label rmb = new Label("Right mouse click - Interact/place block", this.skin);
+        rmb.setFontScale(0.8f);
+        final Label wasd = new Label("WASD - Move player", this.skin);
+        wasd.setFontScale(0.8f);
 
-        table.add(new Label("Programming", this.skin)).padTop(50);
+        table.add(new Label("Controls", this.skin)).padTop(50);
         table.row();
-        table.add(me);
-        table.row().padTop(20);
-        table.add(new Label("Music", this.skin));
-        table.row();
-        table.add(music);
-        table.row().padTop(20);
-        table.add(new Label("Libraries", this.skin));
-        table.row();
-        table.add(engine);
+        table.add(lmb);
+        table.row().padTop(10);
+        table.add(rmb);
+        table.row().padTop(10);
+        table.add(wasd);
+        table.row().padTop(10);
+
         final TextButton back = new TextButton("Back", this.skin);
         table.row();
         table.add(back).align(Align.left);
 
-        CreditsScreen that = this;
+        ControlsScreen that = this;
         back.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                //game.setScreen(new MainScreen(game));
+                // game.setScreen(new MainScreen(game));
                 mainScreen.back();
                 that.dispose();
             }

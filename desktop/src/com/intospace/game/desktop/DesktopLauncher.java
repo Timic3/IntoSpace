@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		config.setTitle("Into Space");
 		config.setWindowedMode(1280, 720);
 		config.setResizable(false);
-		config.useVsync(true);
+		// config.useVsync(true);
 		// config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		config.setForegroundFPS(60);
 		config.setIdleFPS(60);

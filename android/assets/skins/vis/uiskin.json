@@ -16,7 +16,8 @@ com.badlogic.gdx.graphics.Color: {
 	link-label: {a: 1, b: 0.886, g: 0.631, r: 0.105 }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
-	dialogDim: {name: white, color: {r: 0, g: 0, b: 0, a: 0.45} }
+	dialogDim: {name: white, color: {r: 0, g: 0, b: 0, a: 0.45} },
+	dialogDimMore: {name: white, color: {r: 0, g: 0, b: 0, a: 0.65} }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {down: button-down, up: button },

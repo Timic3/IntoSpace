@@ -4,15 +4,21 @@ import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.intospace.game.IntoSpaceGame;
 import com.intospace.screens.GameScreen;
 import com.intospace.world.Assets;
+import com.intospace.world.CollisionBits;
 
-public class AIPlayer extends Player implements Steerable<Vector2> {
+public class Ghost extends Enemy implements Steerable<Vector2> {
     boolean tagged;
     float boundingRadius;
     float maxLinearSpeed, maxLinearAcceleration;
@@ -21,10 +27,25 @@ public class AIPlayer extends Player implements Steerable<Vector2> {
     SteeringBehavior<Vector2> behavior;
     SteeringAcceleration<Vector2> steeringOutput;
 
-    public AIPlayer(float x, float y, OrthographicCamera camera, World world) {
-        super(x, y, camera, world);
-        this.maxLinearSpeed = 4;
-        this.maxLinearAcceleration = 5;
+    Arrive<Vector2> arriveBehavior;
+    Wander<Vector2> wanderBehavior;
+
+    Player player;
+
+    public Ghost(float x, float y, World world, Player player) {
+        super(x, y, 32, 64, world);
+
+        // Make it collisionless with terrain
+        for (Fixture fixture : body.getFixtureList()) {
+            Filter filter = fixture.getFilterData();
+            filter.maskBits &= ~CollisionBits.TERRAIN;
+            fixture.setFilterData(filter);
+        }
+
+        body.setGravityScale(0);
+
+        this.maxLinearSpeed = 1; // 1
+        this.maxLinearAcceleration = 1; // 1
         this.maxAngularSpeed = 1;
         this.maxAngularAcceleration = 1;
         this.boundingRadius = 0.1f;
@@ -32,17 +53,37 @@ public class AIPlayer extends Player implements Steerable<Vector2> {
         this.tagged = false;
 
         this.steeringOutput = new SteeringAcceleration<>(new Vector2());
-        if (x == 0 && y == 420) {
-            final TextureAtlas atlas = IntoSpaceGame.getInstance().assets.get(Assets.ENEMIES);
 
-            this.idleTexture = atlas.findRegion("Ghost");
-            this.handTexture = null;
-        }
+        final TextureAtlas atlas = IntoSpaceGame.getInstance().assets.get(Assets.ENEMIES);
+        this.texture = atlas.findRegion("Ghost");
+
+        this.arriveBehavior = new Arrive<>(this, player)
+                .setTimeToTarget(0.01f)
+                .setArrivalTolerance(0f)
+                .setDecelerationRadius(0);
+        this.wanderBehavior = new Wander<>(this)
+                .setEnabled(true)
+                .setWanderRadius(2f)
+                .setWanderOffset(1f)
+                .setWanderRate(MathUtils.PI2 * 3);
+        this.player = player;
+        this.setBehavior(wanderBehavior);
+        this.setMaxLinearAcceleration(1f);
+        this.setMaxLinearSpeed(1f);
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
+
+        if (this.getPosition().dst(player.getPosition()) < 7f) {
+            this.setBehavior(arriveBehavior);
+        } else if (this.getPosition().dst(player.getPosition()) > 5f && this.getBehavior() instanceof Arrive) {
+            this.setBehavior(wanderBehavior);
+            this.setMaxLinearAcceleration(1f);
+            this.setMaxLinearSpeed(1f);
+        }
+
         GdxAI.getTimepiece().update(delta);
         if (behavior != null) {
             behavior.calculateSteering(steeringOutput);

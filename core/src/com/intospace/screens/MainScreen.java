@@ -16,59 +16,100 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainScreen extends ScreenBase {
-    private Stage stage;
+    boolean ingame = false;
+    Screen currentScreen;
 
     public MainScreen(Game game) {
         super(game);
     }
 
+    public MainScreen(Game game, boolean ingame) {
+        super(game);
+        this.ingame = ingame;
+    }
+
     @Override
     public void show() {
+        this.show(null);
+    }
+
+    public void show(GameScreen gameScreen) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);
         table.setRound(false);
+        if (ingame)
+            table.setBackground(skin.getDrawable("dialogDim"));
         table.align(Align.top);
         stage.addActor(table);
 
         final Image title = new Image(new Texture(Gdx.files.internal("images/logo.png")));
         final Label screen = new Label("Main Menu", this.skin);
-        final TextButton play = new TextButton("Play", this.skin);
+        final TextButton play = new TextButton(this.ingame ? "Resume" : "Play", this.skin);
+        if (ingame) {
+            play.setColor(0, 1f, 1f, 1f);
+        }
+        final TextButton controls = new TextButton("Controls", this.skin);
         final TextButton options = new TextButton("Options", this.skin);
         final TextButton credits = new TextButton("Credits", this.skin);
         final TextButton quit = new TextButton("Quit", this.skin);
         table.add(title).padTop(50);
         table.row();
-        table.add(screen).padTop(20);
-        table.row();
+        if (!ingame) {
+            table.add(screen).padTop(20);
+            table.row();
+        }
         table.add(play).width(250).padTop(20);
+        table.row();
+        table.add(controls).width(250).padTop(20);
         table.row();
         table.add(options).width(250).padTop(10);
         table.row();
         table.add(credits).width(250).padTop(10);
         table.row();
-        table.add(quit).width(250).padTop(10);
+        table.add(quit).width(250).padTop(20);
 
+        MainScreen that = this;
         play.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new IntroScreen(game));
+                if (!ingame) {
+                    game.setScreen(new IntroScreen(game));
+                } else {
+                    if (gameScreen != null) {
+                        gameScreen.setMainMenu();
+                    }
+                    // that.dispose();
+                }
+            }
+        });
+
+        controls.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //game.setScreen(new ControlsScreen(game));
+                currentScreen = new ControlsScreen(game, that);
+                currentScreen.show();
             }
         });
 
         options.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new OptionsScreen(game));
+                //game.setScreen(new OptionsScreen(game));
+                currentScreen = new OptionsScreen(game, that);
+                currentScreen.show();
             }
         });
 
         credits.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new CreditsScreen(game));
+                //game.setScreen(new CreditsScreen(game));
+                currentScreen = new CreditsScreen(game, that);
+                currentScreen.show();
             }
         });
 
@@ -81,11 +122,24 @@ public class MainScreen extends ScreenBase {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.23f, 0.23f, 0.23f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.render(delta);
 
-        stage.act(delta);
-        stage.draw();
+        if (!this.ingame) {
+            Gdx.gl.glClearColor(0.23f, 0.23f, 0.23f, 1.0f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        }
+
+        if (currentScreen == null) {
+            stage.act(delta);
+            stage.draw();
+        } else if (currentScreen instanceof ControlsScreen || currentScreen instanceof OptionsScreen || currentScreen instanceof CreditsScreen) {
+            currentScreen.render(delta);
+        }
+    }
+
+    public void back() {
+        this.currentScreen = null;
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override

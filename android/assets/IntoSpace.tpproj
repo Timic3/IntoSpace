@@ -15,8 +15,8 @@ maxHeight=2048
 maxWidth=2048
 minHeight=16
 minWidth=16
-paddingX=2
-paddingY=2
+paddingX=0
+paddingY=0
 pot=true
 mof=false
 rotation=false
@@ -32,7 +32,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../../IntoSpaceAssets/Blocks/Cobblestone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Grass_Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Moon_Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Sand_Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Sand.png,type:Input,regionName:null}]
+inputFiles=[{path:../../../IntoSpaceAssets/Blocks/Cobblestone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Grass_Dirt.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Moon_Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Sand_Stone.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Sand.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Dilithium.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Blocks/Gold.png,type:Input,regionName:null}]
 
 
 ---
@@ -71,7 +71,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../../IntoSpaceAssets/Player/Player_Running_6.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_0.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_1.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_2.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_3.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_4.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_5.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Idle.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Hand.png,type:Input,regionName:null}]
+inputFiles=[{path:../../../IntoSpaceAssets/Player/Player_Running_6.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_0.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_1.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_2.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_3.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_4.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Running_5.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Idle.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Player_Hand.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Player/Plasma_Tool.png,type:Input,regionName:null}]
 
 
 ---
@@ -111,6 +111,84 @@ useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
 inputFiles=[{path:../../../IntoSpaceAssets/Ghost.png,type:Input,regionName:null}]
+
+
+---
+
+name=Interface
+filename=
+output=.
+
+alias=true
+alphaThreshold=0
+debug=false
+duplicatePadding=false
+edgePadding=true
+fast=false
+filterMag=Nearest
+filterMin=Nearest
+ignoreBlankImages=true
+maxHeight=2048
+maxWidth=2048
+minHeight=16
+minWidth=16
+paddingX=2
+paddingY=2
+pot=true
+mof=false
+rotation=false
+stripWhitespaceX=false
+stripWhitespaceY=false
+wrapX=ClampToEdge
+wrapY=ClampToEdge
+premultiplyAlpha=false
+grid=false
+square=false
+bleed=true
+limitMemory=true
+useIndexes=true
+
+scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
+inputFiles=[{path:../../../IntoSpaceAssets/Interface/Compass_Base.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Interface/Compass_Cursor.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Interface/Heart.png,type:Input,regionName:null},{path:../../../IntoSpaceAssets/Interface/Armor.png,type:Input,regionName:null}]
+
+
+---
+
+name=Objects
+filename=
+output=.
+
+alias=true
+alphaThreshold=0
+debug=false
+duplicatePadding=false
+edgePadding=true
+fast=false
+filterMag=Nearest
+filterMin=Nearest
+ignoreBlankImages=true
+maxHeight=2048
+maxWidth=2048
+minHeight=16
+minWidth=16
+paddingX=2
+paddingY=2
+pot=true
+mof=false
+rotation=false
+stripWhitespaceX=false
+stripWhitespaceY=false
+wrapX=ClampToEdge
+wrapY=ClampToEdge
+premultiplyAlpha=false
+grid=false
+square=false
+bleed=true
+limitMemory=true
+useIndexes=true
+
+scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
+inputFiles=[{path:../../../IntoSpaceAssets/Objects/Rocket.png,type:Input,regionName:null}]
 
 
 -PROJ-

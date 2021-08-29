@@ -11,17 +11,29 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
+import com.intospace.entities.Enemy;
 import com.intospace.enums.DayNightCycle;
+import com.intospace.enums.GameState;
 import com.intospace.enums.WorldType;
 import com.intospace.game.Constants;
 import com.intospace.game.IntoSpaceGame;
 import com.intospace.world.generators.OpenSimplex2F;
 import com.intospace.world.generators.PerlinNoise;
+import com.intospace.world.inventory.InventoryManager;
+import com.intospace.world.quests.DilithiumQuest;
+import com.intospace.world.quests.QuestManager;
+
+import java.util.ArrayList;
 
 public class WorldManager implements Disposable {
+    private static WorldManager instance;
+    public static int level = 1;
     public static Tile[][] tiles = new Tile[1000][1000];
     public DirectionalLight sun;
 
+    public ArrayList<Enemy> enemies = new ArrayList<>();
+
+    GameState state = GameState.PAUSED;
     WorldType type;
     long seed;
 
@@ -39,6 +51,7 @@ public class WorldManager implements Disposable {
     }
 
     public WorldManager(WorldType type, long seed, float gravity) {
+        instance = this;
         Box2D.init();
         this.type = type;
         this.seed = seed;
@@ -52,6 +65,15 @@ public class WorldManager implements Disposable {
 
         Gdx.app.log("World", "Seed: " + seed);
 
+        QuestManager questManager = QuestManager.getInstance();
+        if (this.type == WorldType.EARTH) {
+            questManager.setCurrentQuest(new DilithiumQuest(100 * level++));
+        } else if (this.type == WorldType.ROCKY) {
+            questManager.setCurrentQuest(new DilithiumQuest(100 * level++));
+        } else if (this.type == WorldType.SANDY) {
+            questManager.setCurrentQuest(new DilithiumQuest(100 * level++));
+        }
+
         TextureAtlas blockAtlas = IntoSpaceGame.getInstance().assets.get(Assets.BLOCKS);
         TextureAtlas.AtlasRegion dirt = blockAtlas.findRegion("Dirt");
         TextureAtlas.AtlasRegion grassDirt = blockAtlas.findRegion("Grass_Dirt");
@@ -61,12 +83,13 @@ public class WorldManager implements Disposable {
         TextureAtlas.AtlasRegion sandStone = blockAtlas.findRegion("Sand_Stone");
         TextureAtlas.AtlasRegion cobblestone = blockAtlas.findRegion("Cobblestone");
         TextureAtlas.AtlasRegion dilithium = blockAtlas.findRegion("Dilithium");
+        TextureAtlas.AtlasRegion gold = blockAtlas.findRegion("Gold");
 
         TextureAtlas.AtlasRegion[] layers = null;
 
         RayHandlerOptions rayHandlerOptions = new RayHandlerOptions();
         rayHandlerOptions.setDiffuse(true);
-        rayHandlerOptions.setGammaCorrection(true);
+        rayHandlerOptions.setGammaCorrection(false);
         rayHandlerOptions.setPseudo3d(false, true);
 
         rayHandler = new RayHandler(world, rayHandlerOptions);
@@ -81,7 +104,7 @@ public class WorldManager implements Disposable {
         sun.setActive(true);
         sun.setStaticLight(false);
         sun.setSoftnessLength(2f); // 3f
-        DirectionalLight.setGlobalContactFilter((short) 0b01, (short) 0, (short) 0b10);
+        DirectionalLight.setGlobalContactFilter(CollisionBits.LIGHT, (short) 0, CollisionBits.TERRAIN); // 0b01, 0b10
 
         switch (type) {
             case EARTH:
@@ -109,12 +132,17 @@ public class WorldManager implements Disposable {
             }
             int worldHeight = 100 + (int) (perlinNoise.getNoise(x - Constants.MIN_X, Constants.MAX_Y - Constants.MIN_Y - 50) * edgeContingency + (1 - edgeContingency) * edgeMidpoint);
             for (int y = Constants.MIN_Y; y < worldHeight; ++y) {
+                double oreNoise = simplexNoise.noise2(x, y);
                 if (y == worldHeight - 1) {
                     tiles[x][y] = new Tile(layers[0], x * 32, y * 32, world);
                     continue;
                 }
                 if (y < Constants.MIN_Y + 15) {
-                    tiles[x][y] = new Tile(layers[3], x * 32, y * 32, world);
+                    if (oreNoise >= 0.75f && oreNoise <= 0.8f) {
+                        tiles[x][y] = new Tile(gold, x * 32, y * 32, world);
+                    } else {
+                        tiles[x][y] = new Tile(layers[3], x * 32, y * 32, world);
+                    }
                     continue;
                 }
                 if (y > worldHeight - 20) {
@@ -123,11 +151,16 @@ public class WorldManager implements Disposable {
                 }
                 double noise = simplexNoise.noise2_XBeforeY(x / 32f, y / 18f) + (1 - edgeContingency);
                 if (y < worldHeight - Constants.MAX_Y + 100 && noise > -0.1f) { // -0.1f
-                    tiles[x][y] = new Tile(layers[3], x * 32, y * 32, world);
+                    if (oreNoise >= 0.7f && oreNoise <= 0.8f) {
+                        tiles[x][y] = new Tile(gold, x * 32, y * 32, world);
+                    } else {
+                        tiles[x][y] = new Tile(layers[3], x * 32, y * 32, world);
+                    }
                 } else if (noise > -0.5f) { // -0.5f
-                    double oreNoise = simplexNoise.noise2(x, y);
-                    if (oreNoise >= 0.85f) {
+                    if (oreNoise >= 0.85f && oreNoise <= 1f) {
                         tiles[x][y] = new Tile(dilithium, x * 32, y * 32, world);
+                    //} else if (oreNoise >= 0.75f && oreNoise <= 0.8f) {
+                    //    tiles[x][y] = new Tile(gold, x * 32, y * 32, world);
                     } else {
                         tiles[x][y] = new Tile(layers[2], x * 32, y * 32, world);
                     }
@@ -196,10 +229,23 @@ public class WorldManager implements Disposable {
         return (int) ((1f - (this.sunDirection + 90f) / 360f + 0.5f) * 86400);
     }
 
+    public GameState getState() {
+        return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
     @Override
     public void dispose() {
         tiles = new Tile[1000][1000];
         rayHandler.dispose();
         world.dispose();
+        instance = null;
+    }
+
+    public static WorldManager getInstance() {
+        return instance;
     }
 }

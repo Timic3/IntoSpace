@@ -17,7 +17,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class SplashScreen extends ScreenBase {
-    private Stage stage;
     private AssetManager assets;
 
     private ProgressBar progress;
@@ -46,6 +45,8 @@ public class SplashScreen extends ScreenBase {
 
     @Override
     public void render(float delta) {
+        super.render(delta);
+
         Gdx.gl.glClearColor(0.23f, 0.23f, 0.23f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

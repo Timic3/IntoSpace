@@ -21,6 +21,9 @@ public class ParallaxBackground {
     private int speedX;
     private int speedY;
 
+    private float cameraX;
+    private float alpha = 1f;
+
     public ParallaxBackground(Array<Texture> layers) {
         this.layers = layers;
         for (int i = 0; i < this.layers.size; i++) {
@@ -38,9 +41,18 @@ public class ParallaxBackground {
         flipX = flipY = false;
     }
 
-    public void draw(Batch batch, float cameraX, float cameraY) {
-        cameraX *= speedX;
+    public void addCameraX(float cameraX) {
+        this.cameraX -= cameraX;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+    }
+
+    public void draw(Batch batch, float cameraY) {
+        final float cameraX = this.cameraX * speedX;
         batch.begin();
+        batch.setColor(this.alpha, this.alpha, this.alpha, 1f);
         for (int i = 0; i < layers.size; i++) {
             srcX = (int) (cameraX + i * 2 * cameraX);
             srcY = (int) -(cameraY - 150 + i * cameraY);

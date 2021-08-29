@@ -4,65 +4,72 @@ size: 512, 128
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-Player_Hand
+Plasma_Tool
   rotate: false
   xy: 2, 4
-  size: 32, 64
-  orig: 32, 64
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
-Player_Idle
+Player_Hand
   rotate: false
   xy: 36, 4
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
   index: -1
-Player_Running
+Player_Idle
   rotate: false
   xy: 70, 4
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
-  index: 0
+  index: -1
 Player_Running
   rotate: false
   xy: 104, 4
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
-  index: 1
+  index: 0
 Player_Running
   rotate: false
   xy: 138, 4
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
-  index: 2
+  index: 1
 Player_Running
   rotate: false
   xy: 172, 4
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
-  index: 3
+  index: 2
 Player_Running
   rotate: false
   xy: 206, 4
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
-  index: 4
+  index: 3
 Player_Running
   rotate: false
   xy: 240, 4
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
-  index: 5
+  index: 4
 Player_Running
   rotate: false
   xy: 274, 4
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: 5
+Player_Running
+  rotate: false
+  xy: 308, 4
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
