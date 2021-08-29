@@ -84,17 +84,19 @@ public class GameScreen {
 
         ui.begin();
         font.draw(ui, "FPS: " + Gdx.graphics.getFramesPerSecond(), 5, uiCamera.viewportHeight - 5);
-        font.draw(ui, "Camera: " + (com.intospace.screens.GameScreen.cameraLocked ? "[#FF0000]Locked" : "[#00FF00]Unlocked"), 5, uiCamera.viewportHeight - 5 - font.getLineHeight());
+        // font.draw(ui, "Camera: " + (com.intospace.screens.GameScreen.cameraLocked ? "[#FF0000]Locked" : "[#00FF00]Unlocked"), 5, uiCamera.viewportHeight - 5 - font.getLineHeight());
         // font.draw(ui, "Seed: " + (.seed), 5, uiCamera.viewportHeight - 5 - font.getLineHeight() * 2);
-        font.draw(ui, "Elements on screen: " + (com.intospace.screens.GameScreen.elementsOnScreen), 5, uiCamera.viewportHeight - 5 - font.getLineHeight() * 2);
+        // font.draw(ui, "Elements on screen: " + (com.intospace.screens.GameScreen.elementsOnScreen), 5, uiCamera.viewportHeight - 5 - font.getLineHeight() * 2);
 
         int seconds = gameScreen.worldManager.getTime();
 
         @SuppressWarnings("DefaultLocale")
         String time = (String.format("%02d", (seconds % 86400) / 3600) + ":" + String.format("%02d", ((seconds % 86400) % 3600) / 60));
 
-        font.draw(ui, "Time: " + time, 5, uiCamera.viewportHeight - 5 - font.getLineHeight() * 4);
-        font.draw(ui, "Gold: [#FFD700]" + RuntimeVariables.GOLD, 5, uiCamera.viewportHeight - 5 - font.getLineHeight() * 5);
+        final long seed = WorldManager.getInstance().getSeed();
+        font.draw(ui, "Time: " + time, 5, uiCamera.viewportHeight - 5 - font.getLineHeight() * 2);
+        font.draw(ui, "Seed: " + seed, 5, uiCamera.viewportHeight - 5 - font.getLineHeight() * 3);
+        font.draw(ui, "Gold: [#FFD700]" + RuntimeVariables.GOLD, 5, uiCamera.viewportHeight - 5 - font.getLineHeight() * 4);
 
         font.draw(ui, com.intospace.screens.GameScreen.VERSION, uiCamera.viewportWidth - versionWidth - 5, font.getLineHeight());
 

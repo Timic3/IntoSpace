@@ -237,6 +237,10 @@ public class WorldManager implements Disposable {
         this.state = state;
     }
 
+    public long getSeed() {
+        return seed;
+    }
+
     @Override
     public void dispose() {
         tiles = new Tile[1000][1000];
